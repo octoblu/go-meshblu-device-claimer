@@ -22,3 +22,6 @@ _testmain.go
 *.exe
 *.test
 *.prof
+go-meshblu-device-claimer
+meshblu-device-claimer
+entrypoint/meshblu-device-claimer
