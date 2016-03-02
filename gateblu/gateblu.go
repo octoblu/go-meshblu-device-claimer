@@ -32,7 +32,7 @@ func generateURI(claimURI, uuid, token string) (*url.URL, error) {
 	if err != nil {
 		return nil, err
 	}
-	uri.Path = fmt.Sprintf("/gateblu/claim/%v", uuid)
+	uri.Path = fmt.Sprintf("/gateblu/%v/claim", uuid)
 	query := uri.Query()
 	query.Set("token", token)
 	uri.RawQuery = query.Encode()
