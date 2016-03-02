@@ -21,32 +21,47 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "path, p",
-			EnvVar: "MESHBLU_JSON_PATH",
+			EnvVar: "MESHBLU_DEVICE_CLAIMER_PATH",
 			Usage:  "Path to meshblu.json",
+		},
+		cli.StringFlag{
+			Name:   "meshblu-uri, m",
+			EnvVar: "MESHBLU_DEVICE_CLAIMER_MESHBLU_URI",
+			Usage:  "Meshblu server to register the device with",
+			Value:  "https://meshblu.octoblu.com:443",
+		},
+		cli.StringFlag{
+			Name:   "claim-uri, c",
+			EnvVar: "MESHBLU_DEVICE_CLAIMER_CLAIM_URI",
+			Usage:  "Base url to claim the meshblu device with, it will append /:uuid/:token.",
+			Value:  "https://app.octoblu.com/node-wizard/claim",
 		},
 	}
 	app.Run(os.Args)
 }
 
 func run(context *cli.Context) {
-	path := getOpts(context)
-	logMsg := fmt.Sprintf("Path is %v", path)
+	path, meshbluURI, claimURI := getOpts(context)
+	logMsg := fmt.Sprintf("Opts are %v %v %v", path, meshbluURI, claimURI)
 	color.Green(logMsg)
 }
 
-func getOpts(context *cli.Context) string {
+func getOpts(context *cli.Context) (string, string, string) {
 	path := context.String("path")
+	meshbluURI := context.String("meshblu-uri")
+	claimURI := context.String("claim-uri")
 
 	if path == "" {
 		cli.ShowAppHelp(context)
 
 		if path == "" {
-			color.Red("  Missing required flag --path or MESHBLU_JSON_PATH")
+			color.Red("  Missing required flag --path, -p, or MESHBLU_DEVICE_CLAIMER_JSON_PATH")
 		}
+
 		os.Exit(1)
 	}
 
-	return path
+	return path, meshbluURI, claimURI
 }
 
 func version() string {
