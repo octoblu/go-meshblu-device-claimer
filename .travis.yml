@@ -1,0 +1,26 @@
+language: go
+go:
+- '1.6'
+before_install:
+- curl -O gpm https://raw.githubusercontent.com/pote/gpm/v1.3.2/bin/gpm
+- chmod +x ./gpm
+- "./gpm"
+before_deploy:
+- "./cross-compile.sh"
+- mkdir -p deploy/latest deploy/$TRAVIS_TAG
+- cp tmp/cross/* deploy/latest
+- cp tmp/cross/* deploy/$TRAVIS_TAG
+deploy:
+  provider: s3
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
+  secret_access_key:
+    secure: qpTUbpJe4W0UwoW2aykHiGDhje41fjcEQquAv4ZVqvuI6L9OR79ZXp0sNbF35x+2/s2yn4uK+7Pxu1P9pjEcXy0gz0iafECzp0s8V/JmpA7jHka71qdvQCdX62ELUJCTzXxn5YKxGyr9Mn3fY90xRblOtFhIGw4kxgOy+NTQMSXCY9XCxGRdwcwO/W17xctbzgl2SQmXR9r63NknfVPZOb7p487cjVmzsyiIm1iOGv+NMSQLsQ2QOkkXtnQsHjjjwu70J3xit9pFNeC4BqUB8594LYmN3ZvaCxm3AFNxWi9UfjELXXAG8lzuoWTHSUG/yA0IRelC+0BVoqHjNDh31tIm+j8V7UDlXsb7UAKD8rwznbw4hctokLyRpzkqnxpBO1CUOs+haEbvpOu0Kxjm/lEXfcEG4SAitHmELmn0FSLWYMaNjGJ2dg0CFSPxjKFAmTDBAhXs3sNmZx8UGeptvOXh54/Ck3pOE9ALWyI7q3FywXW9TakmadM/zNUt+gTBj09FGlloqfuGa4PeWUEdOAdIwcR2gAqQMBryGoudUq4/0C7LAyA6dMZcb1RYuWH1FWdNBqMVti5zJjlzS9LUTYXdzwqFRhpai36vu5FifYd9CeuBexGEmRn2YjhY6uQkaGaq784WyISFjrtOZO4kHemfo88oQy8hDfHJQPw5QY0=
+  bucket: gateblu
+  region: us-west-2
+  skip_cleanup: true
+  local-dir: go-meshblu-device-claimer
+  detect_encoding: true
+  upload-dir: deploy
+  on:
+    tags: true
+    repo: octoblu/go-meshblu-device-claimer
