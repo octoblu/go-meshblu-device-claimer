@@ -25,3 +25,4 @@ _testmain.go
 go-meshblu-device-claimer
 meshblu-device-claimer
 entrypoint/meshblu-device-claimer
+meshblu.json
