@@ -9,6 +9,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/coreos/go-semver/semver"
 	"github.com/fatih/color"
+	"github.com/octoblu/go-meshblu-device-claimer/gateblu"
 	"github.com/octoblu/go-meshblu-device-claimer/meshblu"
 	De "github.com/tj/go-debug"
 )
@@ -24,8 +25,8 @@ func main() {
 		cli.StringFlag{
 			Name:   "claim-uri, c",
 			EnvVar: "MESHBLU_DEVICE_CLAIMER_CLAIM_URI",
-			Usage:  "Base url to claim the meshblu device with, it will append /:uuid/:token.",
-			Value:  "https://app.octoblu.com/node-wizard/claim",
+			Usage:  "Base url to claim the meshblu device with, it will add /:uuid and token in the query",
+			Value:  "https://gateblu.octoblu.com",
 		},
 		cli.StringFlag{
 			Name:   "type, t",
@@ -61,10 +62,12 @@ func run(context *cli.Context) {
 	if err != nil {
 		log.Fatalln("Error on toJSONing:", err.Error())
 	}
-
 	ioutil.WriteFile(path, configJSON, 0644)
-
-	fmt.Println("config", config)
+	gateblu := gateblu.New(claimURI)
+	err = gateblu.Claim(config.UUID, config.Token)
+	if err != nil {
+		log.Fatalln("Error claiming", err.Error())
+	}
 }
 
 func getOpts(context *cli.Context) (string, string, string, string) {
