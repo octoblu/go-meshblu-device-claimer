@@ -18,9 +18,9 @@ deploy:
   bucket: gateblu
   region: us-west-2
   skip_cleanup: true
-  local-dir: go-meshblu-device-claimer
+  local-dir: deploy
   detect_encoding: true
-  upload-dir: deploy
+  upload-dir: go-meshblu-device-claimer
   on:
     tags: true
     repo: octoblu/go-meshblu-device-claimer
